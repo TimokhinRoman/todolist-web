@@ -1,4 +1,4 @@
-angular.module('todoApp')
+todoApp
     .controller('registerCtrl', function ($http) {
         var registerCtrl = this;
 

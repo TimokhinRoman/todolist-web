@@ -25,7 +25,7 @@ public class TodoController {
 
     @RequestMapping(value = "/{userName}/todo/save", method = RequestMethod.POST)
     public Todo saveTodo(@PathVariable String userName, @RequestBody Todo todo) {
-        User user = userRepository.findUserByName(userName).get();
+        User user = userRepository.findUserByName(userName);//.get();
 
         todo.setUser(user);
 
@@ -42,7 +42,7 @@ public class TodoController {
 
     @RequestMapping(value = "/{userName}/todo/remove", method = RequestMethod.GET)
     public void removeTodo(@PathVariable String userName, @RequestParam Long id) {
-        User user = userRepository.findUserByName(userName).get();
+        User user = userRepository.findUserByName(userName);//.get();
 
         todoRepository.delete(id);
     }

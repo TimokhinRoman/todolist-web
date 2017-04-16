@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.timokhin.todolist.bean.User;
 import ru.timokhin.todolist.dao.UserRepository;
 
+import java.security.Principal;
+
 @RestController
 public class UserController {
 
@@ -18,24 +20,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
-        return "Pizdec!";
-        //System.out.println("login: Request method 'GET'");
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public void login(@RequestBody User user) {
-        logger.info(user.toString());
-    }
-
-    @RequestMapping(value = "/request/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public void register(@RequestBody User user) {
-        System.out.println(user);
-    }
-
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public void logout() {
 
     }
 }

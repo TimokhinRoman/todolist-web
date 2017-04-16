@@ -1,9 +1,21 @@
-angular.module('todoApp', ['ngRoute'])
-    .config(function ($routeProvider) {
+var todoApp = angular.module('todoApp', ['ngRoute']);
 
+todoApp
+    .service('authInterceptor', function($q, $location) {
+        var service = this;
+
+        service.responseError = function(response) {
+            if (response.status === 401){
+                $location.path('/login');
+                //window.location = "/login";
+            }
+            return $q.reject(response);
+        };
+    })
+    .config(function ($routeProvider, $httpProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: 'todo.html',
+                templateUrl: 'templates/todo.html',
                 controller: 'todoCtrl'
             })
             .when('/todo', {
@@ -11,13 +23,17 @@ angular.module('todoApp', ['ngRoute'])
                 controller: 'todoCtrl'
             })
             .when('/login', {
-                templateUrl: 'loginn.html',
+                templateUrl: 'templates/login.html',
                 controller: 'loginCtrl',
                 controllerAs: 'loginCtrl'
             })
             .when('/register', {
-                templateUrl: 'register.html',
+                templateUrl: 'templates/register.html',
                 controller: 'registerCtrl',
                 controllerAs: 'registerCtrl'
-            })
+            });
+
+        $httpProvider.interceptors.push('authInterceptor');
+
+        //$httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
     });

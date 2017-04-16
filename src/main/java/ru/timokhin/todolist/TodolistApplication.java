@@ -2,14 +2,13 @@ package ru.timokhin.todolist;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import ru.timokhin.todolist.bean.Todo;
-import ru.timokhin.todolist.bean.User;
-import ru.timokhin.todolist.dao.TodoRepository;
-import ru.timokhin.todolist.dao.UserRepository;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @SpringBootApplication
 public class TodolistApplication {
@@ -20,7 +19,7 @@ public class TodolistApplication {
         SpringApplication.run(TodolistApplication.class, args);
     }
 
-    @Bean
+/*    @Bean
     CommandLineRunner commandLineRunner(UserRepository userRepository, TodoRepository todoRepository) {
         return strings -> {
             User user = userRepository.save(new User("user", "123"));
@@ -35,5 +34,5 @@ public class TodolistApplication {
 //                logger.info(todo.toString());
 //            }
         };
-    }
+    }*/
 }

@@ -1,4 +1,4 @@
-angular.module('todoApp')
+todoApp
     .directive('todoFocus', function todoFocus($timeout) {
         return function (scope, elem, attrs) {
             scope.$watch(attrs.todoFocus, function (newVal) {

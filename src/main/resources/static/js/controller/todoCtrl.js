@@ -1,4 +1,4 @@
-angular.module('todoApp')
+todoApp
     .controller('todoCtrl', function ($scope, $http, $filter, $route, $routeParams) {
 
         var todos = [];

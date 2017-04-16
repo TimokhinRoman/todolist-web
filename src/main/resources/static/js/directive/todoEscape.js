@@ -1,4 +1,4 @@
-angular.module('todoApp')
+todoApp
     .directive('todoEscape', function () {
         var ESCAPE_KEY = 27;
 
