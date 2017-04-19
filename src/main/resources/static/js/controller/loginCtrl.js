@@ -1,26 +1,20 @@
 todoApp
-    .controller('loginCtrl', function ($http, $location) {
-        var loginCtrl = this;
-
-        loginCtrl.login = function () {
-            var credentials = {
-                username: loginCtrl.username,
-                password: loginCtrl.password
-            };
-
+    .controller('loginCtrl', function ($scope, $http, $location) {
+        $scope.login = function () {
             var config = {
                 params: {
-                    username: loginCtrl.username,
-                    password: loginCtrl.password
+                    username: $scope.username,
+                    password: $scope.password
                     //rememberme: rememberMe
                 }
-                //ignoreAuthModule: 'ignoreAuthModule'
             };
 
-            $http.post('login', credentials).then(function (response) {
-                console.log('success: ' + JSON.stringify(response));
-            }, function () {
-                console.log('error');
+            $http.post('/login', {}, config).then(function (response) {
+                //console.log('success: ' + JSON.stringify(response));
+                $location.path('/');
+            }, function (response) {
+                //console.log('error: ' + JSON.stringify(response));
+                $scope.error = true;
             })
         };
     });

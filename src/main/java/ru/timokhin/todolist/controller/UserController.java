@@ -1,27 +1,51 @@
 package ru.timokhin.todolist.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import ru.timokhin.todolist.bean.User;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import ru.timokhin.todolist.dao.UserRepository;
+import ru.timokhin.todolist.model.User;
+import ru.timokhin.todolist.service.SecurityService;
+import ru.timokhin.todolist.validation.UserValidator;
 
-import java.security.Principal;
+import javax.validation.Valid;
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 public class UserController {
 
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserValidator userValidator;
+    @Autowired
+    private SecurityService securityService;
+    @Autowired
+    private MessageSource messageSource;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setValidator(userValidator);
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> validationError(MethodArgumentNotValidException e) {
+        FieldError fieldError = e.getBindingResult().getFieldError();
+        String field = fieldError.getField();
+        String message = messageSource.getMessage(fieldError.getCode(), null, null);
+        return Collections.singletonMap(field, message);
+    }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void register(@RequestBody User user) {
+    public void register(@Valid @RequestBody User user) {
+        userRepository.save(user);
 
+        securityService.login(user.getName(), user.getPassword());
     }
 }

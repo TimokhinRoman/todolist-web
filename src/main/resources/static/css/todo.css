@@ -4,7 +4,7 @@ body {
     padding: 0;
 }*/
 
-button {
+.btn-disappeared {
     margin: 0;
     padding: 0;
     border: 0;
@@ -21,10 +21,10 @@ button {
     font-smoothing: antialiased;
 }
 
-/*body {
+#todobody {
     font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
     line-height: 1.4em;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
     color: #4d4d4d;
     min-width: 230px;
     max-width: 550px;
@@ -33,11 +33,6 @@ button {
     -moz-font-smoothing: antialiased;
     font-smoothing: antialiased;
     font-weight: 300;
-}*/
-
-button,
-input[type="checkbox"] {
-    outline: none;
 }
 
 .hidden {
@@ -186,6 +181,7 @@ label[for='toggle-all'] {
     border: none; /* Mobile Safari */
     -webkit-appearance: none;
     appearance: none;
+    outline: none;
 }
 
 #todo-list li .toggle:after {
@@ -224,6 +220,7 @@ label[for='toggle-all'] {
     color: #cc9a9a;
     margin-bottom: 11px;
     transition: color 0.2s ease-out;
+    outline: none;
 }
 
 #todo-list li .destroy:hover {
@@ -249,7 +246,7 @@ label[for='toggle-all'] {
 #footer {
     color: #777;
     padding: 10px 15px;
-    height: 20px;
+    height: 40px;
     text-align: center;
     border-top: 1px solid #e6e6e6;
 }
@@ -317,6 +314,7 @@ html #clear-completed:active {
     text-decoration: none;
     cursor: pointer;
     position: relative;
+    outline: none;
 }
 
 #clear-completed:hover {
@@ -343,4 +341,36 @@ html #clear-completed:active {
 
 #info a:hover {
     text-decoration: underline;
+}
+
+/*
+	Hack to remove background from Mobile Safari.
+	Can't use it globally since it destroys checkboxes in Firefox
+*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #toggle-all,
+    #todo-list li .toggle {
+        background: none;
+    }
+
+    #todo-list li .toggle {
+        height: 40px;
+    }
+
+    #toggle-all {
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
+@media (max-width: 430px) {
+    #footer {
+        height: 50px;
+    }
+
+    #filters {
+        bottom: 10px;
+    }
 }

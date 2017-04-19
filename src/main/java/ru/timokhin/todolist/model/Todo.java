@@ -1,4 +1,4 @@
-package ru.timokhin.todolist.bean;
+package ru.timokhin.todolist.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

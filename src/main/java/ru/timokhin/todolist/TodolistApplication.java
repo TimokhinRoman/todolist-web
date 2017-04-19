@@ -1,38 +1,42 @@
 package ru.timokhin.todolist;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import ru.timokhin.todolist.dao.TodoRepository;
+import ru.timokhin.todolist.dao.UserRepository;
+import ru.timokhin.todolist.model.Todo;
+import ru.timokhin.todolist.model.User;
 
 @SpringBootApplication
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class TodolistApplication {
-
-    private static final Logger logger = LoggerFactory.getLogger(TodolistApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(TodolistApplication.class, args);
     }
 
-/*    @Bean
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageBundle = new ReloadableResourceBundleMessageSource();
+        messageBundle.setBasename("classpath:validation");
+        return messageBundle;
+    }
+
+    @Bean
     CommandLineRunner commandLineRunner(UserRepository userRepository, TodoRepository todoRepository) {
         return strings -> {
-            User user = userRepository.save(new User("user", "123"));
+            User user = userRepository.save(new User("admin", "admin"));
 
-//            todoRepository.save(new Todo("111111111111111111111", user));
-//            todoRepository.save(new Todo("222222222222222222222", user));
-//            todoRepository.save(new Todo("333333333333333333333", user));
-//
-//            logger.info(userRepository.findOne(1L).toString());
-//
-//            for (Todo todo : todoRepository.findAll()) {
-//                logger.info(todo.toString());
-//            }
+            Todo loginTodo = new Todo("Login as admin", user);
+            loginTodo.setCompleted(true);
+
+            todoRepository.save(loginTodo);
+            todoRepository.save(new Todo("Make your first todo", user));
+            todoRepository.save(new Todo("Complete your first todo", user));
         };
-    }*/
+    }
 }

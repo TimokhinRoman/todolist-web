@@ -1,0 +1,43 @@
+<div id="todobody">
+    <div id="todoapp">
+        <div>
+            <h1>Todo:</h1>
+            <form id="todo-form" ng-submit="addTodo()">
+                <input id="new-todo" type="text" placeholder="What needs to be done?" ng-model="todoText" autofocus>
+            </form>
+        </div>
+        <div id="main" ng-show="todos.length" ng-cloak>
+            <ul id="todo-list">
+                <li ng-repeat="todo in todos | filter:statusFilter"
+                    ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+                    <div class="view">
+                        <input class="toggle" type="checkbox" ng-model="todo.completed"
+                               ng-change="toggleCompleted(todo)">
+                        <label ng-dblclick="editTodo(todo)">{{todo.text}}</label>
+                        <button class="btn-disappeared destroy" ng-click="removeTodo(todo)"></button>
+                    </div>
+                    <form ng-submit="saveEdits(todo)">
+                        <input class="edit" type="text" ng-model="todo.text" ng-blur="saveEdits(todo)"
+                               todo-focus="todo == editedTodo" todo-escape="revertEdits(todo)">
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div id="footer" ng-show="todos.length" ng-cloak>
+            <span id="todo-count"> {{remainingCount}} more todo</span>
+            <ul id="filters">
+                <li>
+                    <a ng-class="{selected: status == ''} " href="#/todo/">All</a>
+                </li>
+                <li>
+                    <a ng-class="{selected: status == 'active'}" href="#/todo/active">Active</a>
+                </li>
+                <li>
+                    <a ng-class="{selected: status == 'completed'}" href="#/todo/completed">Completed</a>
+                </li>
+            </ul>
+            <button id="clear-completed" class="btn-disappeared" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,11 +1,11 @@
 var todoApp = angular.module('todoApp', ['ngRoute']);
 
 todoApp
-    .service('authInterceptor', function($q, $location) {
+    .service('authInterceptor', function ($q, $location) {
         var service = this;
 
-        service.responseError = function(response) {
-            if (response.status === 401){
+        service.responseError = function (response) {
+            if (response.status === 401) {
                 $location.path('/login');
                 //window.location = "/login";
             }
@@ -15,23 +15,27 @@ todoApp
     .config(function ($routeProvider, $httpProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: 'templates/todo.html',
-                controller: 'todoCtrl'
+                redirectTo: '/todo'
             })
             .when('/todo', {
-                templateUrl: 'todo.html',
+                templateUrl: 'html/todo.html',
+                controller: 'todoCtrl'
+            })
+            .when('/todo/:status', {
+                templateUrl: 'html/todo.html',
                 controller: 'todoCtrl'
             })
             .when('/login', {
-                templateUrl: 'templates/login.html',
-                controller: 'loginCtrl',
-                controllerAs: 'loginCtrl'
+                templateUrl: 'html/login.html',
+                controller: 'loginCtrl'
+                //controllerAs: 'loginCtrl'
             })
             .when('/register', {
-                templateUrl: 'templates/register.html',
-                controller: 'registerCtrl',
-                controllerAs: 'registerCtrl'
-            });
+                templateUrl: 'html/register.html',
+                controller: 'registerCtrl'
+                //controllerAs: 'registerCtrl'
+            })
+            .otherwise('/todo');
 
         $httpProvider.interceptors.push('authInterceptor');
 

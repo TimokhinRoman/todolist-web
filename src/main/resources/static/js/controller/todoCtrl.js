@@ -3,12 +3,12 @@ todoApp
 
         var todos = [];
 
-        $http.get('/user/todo').then(function (response) {
+        $http.get('/todo').then(function (response) {
             todos = $scope.todos = response.data;
         });
 
         var save = function (todo) {
-            return $http.post('user/todo/save', todo);
+            return $http.post('/todo/save', todo);
         };
 
         var remove = function (todo) {
@@ -17,7 +17,7 @@ todoApp
                     id: todo.id
                 }
             };
-            return $http.get('user/todo/remove/', config).then(function () {
+            return $http.get('/todo/remove/', config).then(function () {
                 var i = todos.indexOf(todo);
                 todos.splice(i, 1);
             });
@@ -36,7 +36,6 @@ todoApp
 
         $scope.$on('$routeChangeSuccess', function () {
             var status = $scope.status = $routeParams.status || '';
-            console.log(status);
             $scope.statusFilter = (status === 'active') ?
                 {completed: false} : (status === 'completed') ?
                     {completed: true} : {};
@@ -103,7 +102,7 @@ todoApp
             });
 
             completedTodos.forEach(function (todo) {
-               remove(todo);
+                remove(todo);
             });
         };
     });

@@ -1,14 +1,17 @@
 todoApp
-    .controller('registerCtrl', function ($http) {
-        var registerCtrl = this;
-
-        registerCtrl.register = function () {
+    .controller('registerCtrl', function ($scope, $http, $location) {
+        $scope.register = function () {
             var user = {
-                name: registerCtrl.username,
-                password: registerCtrl.password,
-                passwordConfirm: registerCtrl.passwordConfirm
+                name: $scope.username,
+                password: $scope.password,
+                confirmPassword: $scope.confirmPassword
             };
 
-            //$http.post('/register', user);
+            $http.post('/register', user).then(function (response) {
+                $location.path('/');
+            }, function (response) {
+                //console.log(JSON.stringify(response));
+                $scope.error = response.data;
+            })
         };
     });

@@ -1,4 +1,4 @@
-package ru.timokhin.todolist.bean;
+package ru.timokhin.todolist.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ public class User {
     @Transient
     private String confirmPassword;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private Set<Todo> todos = new HashSet<>();
 
     public User() {
@@ -72,6 +72,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
                 ", todos=" + todos +
                 '}';
     }
