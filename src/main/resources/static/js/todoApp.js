@@ -1,43 +1,38 @@
 var todoApp = angular.module('todoApp', ['ngRoute']);
 
 todoApp
-    .service('authInterceptor', function ($q, $location) {
-        var service = this;
-
-        service.responseError = function (response) {
-            if (response.status === 401) {
-                $location.path('/login');
-                //window.location = "/login";
-            }
-            return $q.reject(response);
-        };
-    })
     .config(function ($routeProvider, $httpProvider) {
+        var todoConfig = {
+            templateUrl: 'html/todo.html',
+            controller: 'todoCtrl'
+        };
+
         $routeProvider
             .when('/', {
                 redirectTo: '/todo'
             })
-            .when('/todo', {
-                templateUrl: 'html/todo.html',
-                controller: 'todoCtrl'
-            })
-            .when('/todo/:status', {
-                templateUrl: 'html/todo.html',
-                controller: 'todoCtrl'
-            })
+            .when('/todo', todoConfig)
+            .when('/todo/:status', todoConfig)
             .when('/login', {
                 templateUrl: 'html/login.html',
                 controller: 'loginCtrl'
-                //controllerAs: 'loginCtrl'
             })
             .when('/register', {
                 templateUrl: 'html/register.html',
                 controller: 'registerCtrl'
-                //controllerAs: 'registerCtrl'
             })
+            .when('/users', {
+                templateUrl: 'html/users.html',
+                controller: 'adminCtrl'
+            })
+            .when('/users/:username', {
+                redirectTo: function (routeParams) {
+                    return '/users/' + routeParams.username + '/todo';
+                }
+            })
+            .when('/users/:username/todo', todoConfig)
+            .when('/users/:username/todo/:status', todoConfig)
             .otherwise('/todo');
 
         $httpProvider.interceptors.push('authInterceptor');
-
-        //$httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
     });

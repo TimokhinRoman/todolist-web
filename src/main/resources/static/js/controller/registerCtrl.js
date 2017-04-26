@@ -1,5 +1,5 @@
 todoApp
-    .controller('registerCtrl', function ($scope, $http, $location) {
+    .controller('registerCtrl', function ($rootScope, $scope, $http, $location) {
         $scope.register = function () {
             var user = {
                 name: $scope.username,
@@ -9,8 +9,8 @@ todoApp
 
             $http.post('/register', user).then(function (response) {
                 $location.path('/');
+                $rootScope.user = response.data;
             }, function (response) {
-                //console.log(JSON.stringify(response));
                 $scope.error = response.data;
             })
         };

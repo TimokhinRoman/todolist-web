@@ -13,6 +13,7 @@ import ru.timokhin.todolist.service.SecurityService;
 import ru.timokhin.todolist.validation.UserValidator;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Map;
 
@@ -42,10 +43,16 @@ public class UserController {
         return Collections.singletonMap(field, message);
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public void register(@Valid @RequestBody User user) {
+    @PostMapping("/register")
+    public User register(@Valid @RequestBody User user) {
+        user.setRole("ROLE_USER");
         userRepository.save(user);
-
         securityService.login(user.getName(), user.getPassword());
+        return user;
+    }
+
+    @GetMapping("/user")
+    public User getLoginUser(Principal principal) {
+        return userRepository.findUserByName(principal.getName());
     }
 }

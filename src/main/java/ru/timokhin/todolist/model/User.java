@@ -1,5 +1,7 @@
 package ru.timokhin.todolist.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,16 +16,19 @@ public class User {
     private String password;
     @Transient
     private String confirmPassword;
+    private String role;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Todo> todos = new HashSet<>();
 
     public User() {
     }
 
-    public User(String name, String password) {
+    public User(String name, String password, String role) {
         this.name = name;
         this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -64,6 +69,14 @@ public class User {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

@@ -27,16 +27,20 @@
             <span id="todo-count"> {{remainingCount}} more todo</span>
             <ul id="filters">
                 <li>
-                    <a ng-class="{selected: status == ''} " href="#/todo/">All</a>
+                    <a ng-class="{selected: status == ''} "
+                       ng-href="#{{username ? '/users/' + username : ''}}/todo/">All</a>
                 </li>
                 <li>
-                    <a ng-class="{selected: status == 'active'}" href="#/todo/active">Active</a>
+                    <a ng-class="{selected: status == 'active'}"
+                       ng-href="#{{username ? '/users/' + username : ''}}/todo/active">Active</a>
                 </li>
                 <li>
-                    <a ng-class="{selected: status == 'completed'}" href="#/todo/completed">Completed</a>
+                    <a ng-class="{selected: status == 'completed'}"
+                       href="#{{username ? '/users/' + username : ''}}/todo/completed">Completed</a>
                 </li>
             </ul>
-            <button id="clear-completed" class="btn-disappeared" ng-click="clearCompletedTodos()" ng-show="completedCount">Clear completed
+            <button id="clear-completed" class="btn-disappeared" ng-click="clearCompletedTodos()"
+                    ng-show="completedCount">Clear completed
             </button>
         </div>
     </div>

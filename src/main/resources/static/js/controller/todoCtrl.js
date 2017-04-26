@@ -1,37 +1,37 @@
 todoApp
-    .controller('todoCtrl', function ($scope, $http, $filter, $route, $routeParams) {
+    .controller('todoCtrl', function ($scope, $http, $filter, $routeParams) {
+        var todoCtrl = this;
 
-        var todos = [];
+        todoCtrl.urlPrefix = '';
 
-        $http.get('/todo').then(function (response) {
-            todos = $scope.todos = response.data;
-        });
+        function getTodosRequest() {
+            return $http.get(todoCtrl.urlPrefix + '/todo');
+        }
 
-        var save = function (todo) {
-            return $http.post('/todo/save', todo);
-        };
+        function saveTodoRequest(todo) {
+            return $http.post(todoCtrl.urlPrefix + '/todo/save', todo);
+        }
 
-        var remove = function (todo) {
+        function removeTodoRequest(todo) {
             var config = {
                 params: {
                     id: todo.id
                 }
             };
-            return $http.get('/todo/remove/', config).then(function () {
-                var i = todos.indexOf(todo);
-                todos.splice(i, 1);
-            });
-        };
+            return $http.post(todoCtrl.urlPrefix + '/todo/remove', {}, config);
+        }
 
-        var reset = function () {
+        function reset() {
             $scope.editing = false;
             $scope.editedTodo = null;
             $scope.originalTodo = null;
-        };
+        }
+
+        $scope.todos = [];
 
         $scope.$watch('todos', function () {
-            $scope.remainingCount = $filter('filter')(todos, {completed: false}).length;
-            $scope.completedCount = todos.length - $scope.remainingCount;
+            $scope.remainingCount = $filter('filter')($scope.todos, {completed: false}).length;
+            $scope.completedCount = $scope.todos.length - $scope.remainingCount;
         }, true);
 
         $scope.$on('$routeChangeSuccess', function () {
@@ -39,6 +39,13 @@ todoApp
             $scope.statusFilter = (status === 'active') ?
                 {completed: false} : (status === 'completed') ?
                     {completed: true} : {};
+
+            var username = $scope.username = $routeParams.username;
+            todoCtrl.urlPrefix = username ? 'users/' + username : '';
+
+            getTodosRequest().then(function (response) {
+                $scope.todos = response.data;
+            });
         });
 
         $scope.addTodo = function () {
@@ -51,16 +58,21 @@ todoApp
                 return;
             }
 
-            save(newTodo).then(function (response) {
-                todos.push(response.data);
+            saveTodoRequest(newTodo).then(function (response) {
+                $scope.todos.push(response.data);
                 $scope.todoText = '';
             });
         };
 
-        $scope.removeTodo = remove;
+        $scope.removeTodo = function (todo) {
+            removeTodoRequest(todo).then(function () {
+                var i = $scope.todos.indexOf(todo);
+                $scope.todos.splice(i, 1);
+            })
+        };
 
         $scope.toggleCompleted = function (todo) {
-            save(todo).then(null, function () {
+            saveTodoRequest(todo).then(null, function () {
                 todo.completed = !todo.completed;
             });
         };
@@ -83,26 +95,26 @@ todoApp
                 return;
             }
 
-            (todo.text ? save(todo) : remove(todo)).then(null, function () {
+            (todo.text ? saveTodoRequest(todo) : $scope.removeTodo(todo)).then(null, function () {
                 todo.text = $scope.originalTodo.text;
             }).finally(reset);
         };
 
         $scope.revertEdits = function (todo) {
-            todos[todos.indexOf(todo)] = $scope.originalTodo;
+            $scope.todos[$scope.todos.indexOf(todo)] = $scope.originalTodo;
             reset();
         };
 
         $scope.clearCompletedTodos = function () {
             var completedTodos = [];
-            todos.forEach(function (todo) {
+            $scope.todos.forEach(function (todo) {
                 if (todo.completed) {
                     completedTodos.push(todo);
                 }
             });
 
             completedTodos.forEach(function (todo) {
-                remove(todo);
+                $scope.removeTodo(todo);
             });
         };
     });

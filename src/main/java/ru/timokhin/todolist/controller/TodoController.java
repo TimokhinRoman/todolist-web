@@ -11,6 +11,7 @@ import java.security.Principal;
 import java.util.Collection;
 
 @RestController
+@RequestMapping("/todo")
 public class TodoController {
 
     @Autowired
@@ -18,20 +19,20 @@ public class TodoController {
     @Autowired
     private TodoRepository todoRepository;
 
-    @RequestMapping(value = "/todo", method = RequestMethod.GET)
-    public Collection<Todo> getAllTodos(Principal principal) {
+    @GetMapping
+    public Collection<Todo> getAllTodo(Principal principal) {
         String username = principal.getName();
         return todoRepository.findByUserName(username);
     }
 
-    @RequestMapping(value = "/todo/save", method = RequestMethod.POST)
+    @PostMapping("/save")
     public Todo saveTodo(Principal principal, @RequestBody Todo todo) {
         User user = userRepository.findUserByName(principal.getName());
         todo.setUser(user);
         return todoRepository.save(todo);
     }
 
-    @RequestMapping(value = "/todo/remove", method = RequestMethod.GET)
+    @PostMapping("/remove")
     public void removeTodo(Principal principal, @RequestParam Long id) {
         User user = userRepository.findUserByName(principal.getName());
         Todo todo = todoRepository.findOne(id);
