@@ -7,7 +7,6 @@ import ru.timokhin.todolist.dao.TodoRepository;
 import ru.timokhin.todolist.dao.UserRepository;
 import ru.timokhin.todolist.model.Todo;
 import ru.timokhin.todolist.model.User;
-
 import java.util.Collection;
 
 @RestController
@@ -26,6 +25,10 @@ public class AdminController {
 
     @GetMapping("/{username}/todo")
     public Collection<Todo> getAllTodoForUser(@PathVariable String username) {
+        User user = userRepository.findUserByName(username);
+        if (user == null) {
+            throw new UserNotFoundException(username);
+        }
         return todoRepository.findByUserName(username);
     }
 
@@ -46,7 +49,7 @@ public class AdminController {
             throw new UserNotFoundException(username);
         }
         Todo todo = todoRepository.findOne(id);
-        if (todo != null & todo.getUser().equals(user)) {
+        if (todo != null && todo.getUser().getId().equals(user.getId())) {
             todoRepository.delete(id);
         }
     }

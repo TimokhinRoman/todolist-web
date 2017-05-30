@@ -14,8 +14,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import ru.timokhin.todolist.dao.UserRepository;
 import ru.timokhin.todolist.model.User;
-
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
@@ -58,9 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected AuthenticationSuccessHandler successHandler() {
         return (httpServletRequest, httpServletResponse, authentication) -> {
             User user = userRepository.findUserByName(authentication.getName());
-            httpServletResponse.getWriter().write(jacksonObjectMapper.writeValueAsString(user));
-            httpServletResponse.getWriter().flush();
-            httpServletResponse.getWriter().close();
+            PrintWriter writer = httpServletResponse.getWriter();
+            writer.write(jacksonObjectMapper.writeValueAsString(user));
+            writer.flush();
+            writer.close();
         };
     }
 }

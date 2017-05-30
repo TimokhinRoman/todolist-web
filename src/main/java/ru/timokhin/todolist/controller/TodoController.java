@@ -6,7 +6,6 @@ import ru.timokhin.todolist.dao.TodoRepository;
 import ru.timokhin.todolist.dao.UserRepository;
 import ru.timokhin.todolist.model.Todo;
 import ru.timokhin.todolist.model.User;
-
 import java.security.Principal;
 import java.util.Collection;
 
@@ -36,7 +35,7 @@ public class TodoController {
     public void removeTodo(Principal principal, @RequestParam Long id) {
         User user = userRepository.findUserByName(principal.getName());
         Todo todo = todoRepository.findOne(id);
-        if (todo != null & todo.getUser().equals(user)) {
+        if (todo != null && todo.getUser().getId().equals(user.getId())) {
             todoRepository.delete(id);
         }
     }

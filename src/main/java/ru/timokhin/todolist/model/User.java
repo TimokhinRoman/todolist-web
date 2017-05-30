@@ -1,10 +1,9 @@
 package ru.timokhin.todolist.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -20,7 +19,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private Set<Todo> todos = new HashSet<>();
+    private List<Todo> todos = new ArrayList<>();
 
     public User() {
     }
@@ -55,11 +54,11 @@ public class User {
         this.password = password;
     }
 
-    public Set<Todo> getTodos() {
+    public List<Todo> getTodos() {
         return todos;
     }
 
-    public void setTodos(Set<Todo> todos) {
+    public void setTodos(List<Todo> todos) {
         this.todos = todos;
     }
 

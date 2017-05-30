@@ -4,7 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import ru.timokhin.todolist.dao.TodoRepository;
 import ru.timokhin.todolist.dao.UserRepository;
 import ru.timokhin.todolist.model.Todo;
@@ -18,10 +18,10 @@ public class TodolistApplication {
     }
 
     @Bean
-    public ReloadableResourceBundleMessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageBundle = new ReloadableResourceBundleMessageSource();
-        messageBundle.setBasename("classpath:validation");
-        return messageBundle;
+    public ResourceBundleMessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("validation");
+        return messageSource;
     }
 
     @Bean
@@ -29,7 +29,7 @@ public class TodolistApplication {
         return strings -> {
             User user = userRepository.save(new User("admin", "admin", "ROLE_ADMIN"));
 
-            Todo loginTodo = new Todo("Login as admin", user);
+            Todo loginTodo = new Todo("Log in as admin", user);
             loginTodo.setCompleted(true);
 
             todoRepository.save(loginTodo);

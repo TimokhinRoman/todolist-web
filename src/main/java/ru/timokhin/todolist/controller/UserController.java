@@ -11,9 +11,7 @@ import ru.timokhin.todolist.dao.UserRepository;
 import ru.timokhin.todolist.model.User;
 import ru.timokhin.todolist.service.SecurityService;
 import ru.timokhin.todolist.validation.UserValidator;
-
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Collections;
 import java.util.Map;
 
@@ -31,7 +29,7 @@ public class UserController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(userValidator);
+        binder.addValidators(userValidator);
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -49,10 +47,5 @@ public class UserController {
         userRepository.save(user);
         securityService.login(user.getName(), user.getPassword());
         return user;
-    }
-
-    @GetMapping("/user")
-    public User getLoginUser(Principal principal) {
-        return userRepository.findUserByName(principal.getName());
     }
 }
